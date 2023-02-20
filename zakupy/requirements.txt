@@ -2,5 +2,7 @@ alembic
 fastapi
 uvicorn[standard]
 sqlmodel
+sqlalchemy
+fastapi-users[sqlalchemy]
 asyncpg
 pytest
