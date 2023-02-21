@@ -3,6 +3,6 @@ fastapi
 uvicorn[standard]
 sqlmodel
 sqlalchemy
-fastapi-users[sqlalchemy]
+fastapi-users[sqlalchemy,redis]
 asyncpg
 pytest
