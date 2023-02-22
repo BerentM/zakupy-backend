@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional, Type
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlmodel import Field, SQLModel
 
@@ -10,6 +11,8 @@ SQLModel.metadata = Base.metadata
 
 
 class ShoppingList(SQLModel, table=True):
+    __tablename__: str = "shopping_list"
+    __table_args__ = (UniqueConstraint("product"),)
     id: Optional[int] = Field(
         default=None,
         primary_key=True,
