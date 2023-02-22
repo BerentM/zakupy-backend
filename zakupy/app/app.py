@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from app.db.models import User
-from app.users.schemas import UserCreate, UserRead, UserUpdate
-from app.users.user_manager import auth_backend, current_active_user, fastapi_users
+from app.routes import shopping_list, users
+from app.users.user_manager import current_active_user
 
 
 def my_schema():
@@ -57,35 +57,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(users.router)
+app.include_router(users.router)
+app.include_router(shopping_list.router)
+
+
 @app.get("/hello")
 async def hello_world():
     return "Hello, World!"
-
-
-app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
-)
-app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
-    fastapi_users.get_reset_password_router(),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
-    fastapi_users.get_verify_router(UserRead),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
-    fastapi_users.get_users_router(UserRead, UserUpdate),
-    prefix="/users",
-    tags=["users"],
-)
 
 
 @app.get("/authenticated-route")
