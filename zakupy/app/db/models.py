@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional, Type
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
@@ -10,12 +10,20 @@ SQLModel.metadata = Base.metadata
 
 
 class ShoppingList(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(
+        default=None,
+        primary_key=True,
+    )
     product: str
     source: str
     category: str
     target_amount: int
     current_amount: Optional[int] = 0
+
+    class Config:
+        @staticmethod
+        def schema_extra(schema: Dict[str, Any], model: Type["ShoppingList"]) -> None:
+            del schema.get("properties")["id"]
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
