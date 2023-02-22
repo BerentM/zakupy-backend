@@ -5,7 +5,7 @@ from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.models import User
+from app.db.models import User
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 engine = create_async_engine(

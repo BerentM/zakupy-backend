@@ -2,9 +2,9 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from app.db import User
-from app.schemas import UserCreate, UserRead, UserUpdate
-from app.users import auth_backend, current_active_user, fastapi_users
+from app.db.models import User
+from app.users.schemas import UserCreate, UserRead, UserUpdate
+from app.users.user_manager import auth_backend, current_active_user, fastapi_users
 
 
 def my_schema():
