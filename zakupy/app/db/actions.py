@@ -5,11 +5,11 @@ from sqlmodel import select
 
 import app.db.schemas as s
 
-from .models import ShoppingList
+from .models import ProductList
 
 
-class ShoppingListDAL:
-    model = ShoppingList
+class ProductListDAL:
+    model = ProductList
     id_key = "id"
 
     @classmethod
@@ -47,7 +47,7 @@ class ShoppingListDAL:
     async def create(
         cls,
         session: AsyncSession,
-        new_item: ShoppingList,
+        new_item: ProductList,
     ):
         session.add(new_item)
         await session.commit()
@@ -59,7 +59,7 @@ class ShoppingListDAL:
         cls,
         session: AsyncSession,
         update_id: int,
-        new_item: s.ShoppingList,
+        new_item: s.ProductList,
     ):
         obj = await cls.get_one(session=session, id=update_id)
         new_data = new_item.dict(exclude_unset=True)
