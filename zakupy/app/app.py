@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from app.db.models import User
-from app.routes import product_list, users
+from app.routes import product_list, shopping_list, users
 from app.users.user_manager import current_active_user
 
 
@@ -63,6 +63,7 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(product_list.router)
+app.include_router(shopping_list.router)
 
 
 @app.get("/hello")
