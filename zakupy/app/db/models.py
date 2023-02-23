@@ -10,8 +10,8 @@ Base: DeclarativeMeta = declarative_base()
 SQLModel.metadata = Base.metadata
 
 
-class ShoppingList(SQLModel, table=True):
-    __tablename__: str = "shopping_list"
+class ProductList(SQLModel, table=True):
+    __tablename__: str = "product_list"
     __table_args__ = (UniqueConstraint("product"),)
     id: Optional[int] = Field(
         default=None,
@@ -25,7 +25,7 @@ class ShoppingList(SQLModel, table=True):
 
     class Config:
         @staticmethod
-        def schema_extra(schema: Dict[str, Any], model: Type["ShoppingList"]) -> None:
+        def schema_extra(schema: Dict[str, Any], model: Type["ProductList"]) -> None:
             del schema.get("properties")["id"]
 
 

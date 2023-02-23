@@ -1,11 +1,13 @@
-from typing import List, Tuple
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import app.db.schemas as s
-from app.db.actions import ShoppingListDAL
+from app.db.actions import ProductDAL
 from app.db.db import get_async_session
-from app.db.models import ShoppingList
+
+from .utils import calc_missing
 
 router = APIRouter(
     prefix="/shoppingList",
@@ -13,46 +15,26 @@ router = APIRouter(
 )
 
 
-async def calc_missing(data: ShoppingList) -> s.ShoppingListOut:
-    out = s.ShoppingListOut(**data.__dict__)
-    out.missing_amount = max(out.target_amount - out.current_amount, 0)
-    return out
-
-
 @router.get("/all")
-async def get_full_shopping_list(
+async def get_missing_product_list(
+    source: Optional[str] = None,
+    missing_percent: Optional[float] = 0,
     session=Depends(get_async_session),
-) -> tuple[List[s.ShoppingListOut], int]:
-    data = await ShoppingListDAL.get_all(session=session)
+) -> tuple[List[s.ProductListOut], int]:
+    data = await ProductDAL.get_all(
+        session=session,
+        missing_percent=missing_percent,
+        source=source,
+    )
     return [await calc_missing(item) for item in data[0]], data[1]
 
 
-@router.get("/one")
-async def get_single_shopping_list_element(
-    id: int, session=Depends(get_async_session)
-) -> s.ShoppingListOut:
-    data = await ShoppingListDAL.get_one(session=session, id=id)
-    return await calc_missing(data)
-
-
-@router.post("/create_item")
-async def add_shopping_list_element(
-    new_item: ShoppingList, session=Depends(get_async_session)
-) -> ShoppingList:
-    return await ShoppingListDAL.create(session=session, new_item=new_item)
-
-
-@router.delete("/delete_item")
-async def remove_shopping_list_element(
-    id: int, session=Depends(get_async_session)
-) -> ShoppingList:
-    return await ShoppingListDAL.delete(session=session, delete_id=id)
-
-
-@router.patch("/update_item")
-async def update_shopping_list_element(
-    id: int, new_data: s.ShoppingList, session=Depends(get_async_session)
-) -> ShoppingList:
-    return await ShoppingListDAL.update(
-        session=session, update_id=id, new_item=new_data
-    )
+@router.patch("/fill_up")
+async def fill_up_current_amount(
+    ids: list[int],
+    session: AsyncSession = Depends(get_async_session),
+):
+    for id in ids:
+        product = await ProductDAL.get_one(session, id)
+        product.current_amount = product.target_amount
+        await ProductDAL.update(session, id, product)

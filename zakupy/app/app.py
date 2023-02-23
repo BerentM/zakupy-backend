@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from app.db.models import User
-from app.routes import shopping_list, users
+from app.routes import product_list, shopping_list, users
 from app.users.user_manager import current_active_user
 
 
@@ -20,6 +20,10 @@ def my_schema():
         {
             "name": "auth",
             "description": "Operations associated with passwords, ie. login, create new user, reset password.",
+        },
+        {
+            "name": "productList",
+            "description": "Manage product list. Create, Read, Update, Delete",
         },
         {
             "name": "shoppingList",
@@ -58,6 +62,7 @@ app.add_middleware(
 )
 
 app.include_router(users.router)
+app.include_router(product_list.router)
 app.include_router(shopping_list.router)
 
 
