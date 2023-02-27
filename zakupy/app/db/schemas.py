@@ -12,9 +12,15 @@ class ProductList(BaseModel):
 
 
 class ProductListOut(ProductList):
+    id: int
     product: str
     source: str
     category: str
     target_amount: int
     current_amount: int = 0
     missing_amount: int = 0
+
+
+class ProductListAPI(BaseModel):
+    product_list: list[ProductListOut] = []
+    count: Optional[int] = None
