@@ -1,13 +1,11 @@
 from typing import Optional
 
-from pydantic import Field
+import app.db.schemas as s
 from sqlalchemy import Float, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Query
 from sqlalchemy.sql.elements import Cast
 from sqlmodel import select
-
-import app.db.schemas as s
 
 from .models import ProductList
 
@@ -27,6 +25,7 @@ class ProductDAL:
     ):
         q = select(cls.model)
         if missing_percent:
+            q = q.where(cls.model.target_amount > 0)
             q = q.where(
                 1 - (Cast(cls.model.current_amount, Float) / cls.model.target_amount)
                 >= missing_percent
