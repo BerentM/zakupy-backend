@@ -36,3 +36,9 @@ jobs:
           context: ./zakupy
           platforms: linux/amd64,linux/arm64
           tags: berentm/zakupy_backend:latest
+      -
+        name: redeploy with portainer
+        uses: satak/webrequest-action@master
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
+          method: POST
