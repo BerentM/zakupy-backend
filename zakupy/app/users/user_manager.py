@@ -1,22 +1,18 @@
+import os
 import uuid
 from typing import Optional
 
 import redis.asyncio
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    BearerTransport,
-    JWTStrategy,
-    RedisStrategy,
-)
-from fastapi_users.db import SQLAlchemyUserDatabase
-
 from app.db.db import get_user_db
 from app.db.models import User
+from fastapi import Depends, Request
+from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
+from fastapi_users.authentication import (AuthenticationBackend,
+                                          BearerTransport, JWTStrategy,
+                                          RedisStrategy)
+from fastapi_users.db import SQLAlchemyUserDatabase
 
-# TODO: change it!
-SECRET = "SECRET"
+SECRET = os.environ.get("SECRET")
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
@@ -64,3 +60,4 @@ auth_backend = AuthenticationBackend(
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
 
 current_active_user = fastapi_users.current_user(active=True)
+current_active_verified_user = fastapi_users.current_user(active=True, verified=True)
