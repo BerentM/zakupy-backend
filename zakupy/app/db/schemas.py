@@ -4,7 +4,7 @@ from app.db.models import Category, Source
 from pydantic import BaseModel
 
 
-class ProductList(BaseModel):
+class SchemaProductList(BaseModel):
     product: Optional[str]
     source: Optional[Source]
     category: Optional[Category]
@@ -12,7 +12,7 @@ class ProductList(BaseModel):
     current_amount: Optional[int] = 0
 
 
-class ProductListOut(ProductList):
+class ProductListOut(SchemaProductList):
     id: int
     product: str
     source: Source

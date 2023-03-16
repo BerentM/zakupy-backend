@@ -43,7 +43,7 @@ class ProductDAL:
         return result, count
 
     @classmethod
-    async def get_one(cls, session: AsyncSession, id: int) -> s.ProductList:
+    async def get_one(cls, session: AsyncSession, id: int) -> s.SchemaProductList:
         q = select(cls.model)
         q = q.where(cls.model.id == id)
 
@@ -61,7 +61,7 @@ class ProductDAL:
 
     @classmethod
     async def update(
-        cls, session: AsyncSession, update_id: int, new_item: s.ProductList
+        cls, session: AsyncSession, update_id: int, new_item: s.SchemaProductList
     ):
         obj = await cls.get_one(session=session, id=update_id)
         new_data = new_item.dict(exclude_unset=True)
