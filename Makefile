@@ -2,7 +2,7 @@ run:
 	go run pkg/main.go serve --http=0.0.0.0:8001
 
 build:
-	go build -o build/zakupy_backend -a pkg/main.go
+	go build -o build/zakupyBackend -a pkg/main.go
 
 downgrade:
 	go run pkg/main.go migrate down

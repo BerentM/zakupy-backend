@@ -3,40 +3,14 @@ version: '3.8'
 services:
 
   backend:
-    build: ./zakupy
-    command: sh startup.sh
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /pb/zakupyBackend serve --http=0.0.0.0:8000
     volumes:
-      - ./zakupy:/app
+      - ./pb_data:/pb/pb_data
     ports:
       - 8000:8000
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_URL=${POSTGRES_URL}
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_URL}:5432/${POSTGRES_DB}
-    depends_on:
-      - db
-      - redis
-
-  db:
-    image: postgres:15.2-alpine
-    ports:
-      - 5432:5432
-    expose:
-      - 5432
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-
-  redis:
-    image: redis:alpine
-    ports:
-      - 6379:6379
-    expose:
-      - 6379
-    volumes:
-      - ./redis-data:/data
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}

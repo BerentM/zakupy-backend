@@ -131,4 +131,4 @@ dmypy.json
 postgres-data/
 redis-data/
 pb_data
-build/zakupy_backend
+build/zakupyBackend
