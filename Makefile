@@ -8,4 +8,4 @@ new migration:
 	go run pkg/main.go migrate create $(name)
 
 migrate:
-	go run main.go migrate collections
+	go run pkg/main.go migrate collections
