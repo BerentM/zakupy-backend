@@ -12,3 +12,6 @@ new migration:
 
 migrate:
 	go run pkg/main.go migrate collections
+
+sync:
+	go run pkg/main.go migrate history-sync

@@ -1,4 +1,4 @@
-name: Upload Go test results
+name: Upload Go Artefact & Docker Image
 
 on: [push]
 
